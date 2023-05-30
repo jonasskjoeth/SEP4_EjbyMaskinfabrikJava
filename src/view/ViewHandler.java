@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 public class ViewHandler
 {
@@ -19,6 +20,9 @@ public class ViewHandler
   private Scene informationScene;
   private Scene addScene;
   private Scene editScene;
+  private Scene graphTPScene;
+  private Scene graphSPScene;
+  private Scene historyScene;
   private FrontPage frontPageController;
   private SolarPanel solarPanelController;
   private ThermalPanel thermalPanelController;
@@ -27,6 +31,9 @@ public class ViewHandler
   private InformationController informationController;
   private AddController addController;
   private EditController editController;
+  private GraphController graphController;
+  private GraphSPController graphSPController;
+  private HistoryController historyController;
 
   public static final String FRONT_PAGE = "FRONT_PAGE";
   public static final String SOLAR_PANEL = "SOLAR_PANEL";
@@ -38,6 +45,9 @@ public class ViewHandler
   public static final String EDIT = "EDIT";
   public static final String BACK = "BACK";
   public static final String DELETE = "DELETE";
+  public static final String GRAPHTP = "GRAPH_TP";
+  public static final String GRAPHSP = "GRAPH_SP";
+  public static final String HISTORY = "HISTORY";
 
   private DatabaseConnector connector;
 
@@ -102,18 +112,18 @@ public class ViewHandler
       System.exit(1);
     }
 
-//    loader = new FXMLLoader();
-//    loader.setLocation(getClass().getResource("solarData.fxml"));
-//    try {
-//      solarDataScene = new Scene(loader.load());
-//      solarDataController = loader.getController();
-//      solarDataController.init(this);
-//    }
-//    catch (IOException e)
-//    {
-//      System.out.println("mmmhhh");
-//      System.exit(1);
-//    }
+    loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("solarData.fxml"));
+    try {
+      solarDataScene = new Scene(loader.load());
+      solarDataController = loader.getController();
+      solarDataController.init(this);
+    }
+    catch (IOException e)
+    {
+      System.out.println("Failed to load solarData");
+      System.exit(1);
+    }
 
     loader = new FXMLLoader();
     loader.setLocation(getClass().getResource("informationPage.fxml"));
@@ -126,6 +136,18 @@ public class ViewHandler
     catch (IOException e)
     {
       System.out.println("Failed to load informationPage.fxml");
+      System.exit(1);
+    }
+
+    loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("graphPage.fxml"));
+    try {
+      graphTPScene = new Scene(loader.load());
+      graphController = loader.getController();
+      graphController.init(this);
+    } catch (IOException e)
+    {
+      System.out.println("Failed to load graphPage");
       System.exit(1);
     }
 
@@ -216,13 +238,13 @@ public class ViewHandler
       primaryStage.show();
       informationController.updateView();
     }
-//    else if (SOLAR_DATA.equals(sceneName))
-//    {
-//      primaryStage.setTitle("Solar Data");
-//      primaryStage.setScene(solarDataScene);
-//      primaryStage.show();
-//      //solarDataController.updateView();
-//    }
+    else if (SOLAR_DATA.equals(sceneName))
+    {
+      primaryStage.setTitle("Solar Data");
+      primaryStage.setScene(solarDataScene);
+      primaryStage.show();
+      solarDataController.updateView();
+    }
     else if (THERMAL_DATA.equals(sceneName))
     {
       primaryStage.setTitle("EJBY MASKINFABRIK");
@@ -245,6 +267,25 @@ public class ViewHandler
       primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(informationScene);
       primaryStage.show();
+    }
+    else if (GRAPHTP.equals(sceneName))
+    {
+      primaryStage.setTitle("EJBY MASKINFABRIK");
+      primaryStage.setScene(graphTPScene);
+      primaryStage.show();
+    }
+    else if (GRAPHSP.equals(sceneName))
+    {
+      primaryStage.setTitle("EJBY MASKINFABRIK");
+      primaryStage.setScene(graphSPScene);
+      primaryStage.show();
+    }
+    else if (HISTORY.equals(sceneName))
+    {
+      primaryStage.setTitle("EJBY MASKINFABRIK");
+      primaryStage.setScene(historyScene);
+      primaryStage.show();
+      historyController.updateView();
     }
   }
 

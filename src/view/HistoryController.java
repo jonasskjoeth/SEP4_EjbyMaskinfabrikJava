@@ -6,21 +6,51 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import model.InformationTable;
 
-import javax.sound.sampled.Line;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.sql.Timestamp;
+import java.util.Date;
 
-public class FrontPage
+public class HistoryController
 {
   @FXML CategoryAxis x;
   @FXML NumberAxis y;
   @FXML LineChart<?, ?> lineChart;
+  @FXML private TableView<InformationTable> informationTableTableView;
+  @FXML private TableColumn<InformationTable, String> manufacturer;
+  @FXML private TableColumn<InformationTable, Integer> placementRow;
+  @FXML private TableColumn<InformationTable, Integer> placementColumn;
+  @FXML private TableColumn<InformationTable, Date> installDate;
+  @FXML private TableColumn<InformationTable, String> contactInfoEmail;
+  @FXML private TableColumn<InformationTable, Integer> contactInfoPhone;
+  @FXML private TableColumn<InformationTable, String> type;
+  @FXML private TableColumn<InformationTable, Timestamp> logDate;
+
 
   private ViewHandler viewHandler;
+
   public void init(ViewHandler viewHandler)
   {
     this.viewHandler = viewHandler;
+  }
+
+  public void updateView()
+  {
+    manufacturer.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
+    placementRow.setCellValueFactory(new PropertyValueFactory<>("placementRow"));
+    placementColumn.setCellValueFactory(new PropertyValueFactory<>("placementColumn"));
+    installDate.setCellValueFactory(new PropertyValueFactory<>("installDate"));
+    contactInfoEmail.setCellValueFactory(new PropertyValueFactory<>("contactInfoEmail"));
+    contactInfoPhone.setCellValueFactory(new PropertyValueFactory<>("contactInfoPhone"));
+    type.setCellValueFactory(new PropertyValueFactory<>("type"));
+//    logDate.setCellValueFactory(new PropertyValueFactory<>("logDate"));
+
+
+    informationTableTableView.setItems(
+        viewHandler.getConnection().getInfoLog());
   }
 
   public void initialize()
@@ -84,6 +114,11 @@ public class FrontPage
     this.lineChart.getData().addAll(series, series2);
   }
 
+  public void information(ActionEvent e)
+  {
+    viewHandler.changeScene(ViewHandler.INFORMATION);
+  }
+
   public void solarPanel(ActionEvent e)
   {
     viewHandler.changeScene(ViewHandler.SOLAR_PANEL);
@@ -92,10 +127,5 @@ public class FrontPage
   public void thermalPanel(ActionEvent e)
   {
     viewHandler.changeScene(ViewHandler.THERMAL_PANEL);
-  }
-
-  public void information(ActionEvent e)
-  {
-    viewHandler.changeScene(ViewHandler.INFORMATION);
   }
 }

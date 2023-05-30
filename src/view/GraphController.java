@@ -6,21 +6,51 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.DatePicker;
+import javafx.scene.input.DataFormat;
 
-import javax.sound.sampled.Line;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.text.DateFormatSymbols;
+import java.time.LocalDate;
+import java.util.List;
 
-public class FrontPage
+public class GraphController
 {
   @FXML CategoryAxis x;
   @FXML NumberAxis y;
-  @FXML LineChart<?, ?> lineChart;
+  @FXML LineChart<?, ?> lineChart2;
+
+  @FXML private LineChart<String, Number> lineChart;
+  @FXML private DatePicker fromDate;
+  @FXML private DatePicker toDate;
 
   private ViewHandler viewHandler;
+
   public void init(ViewHandler viewHandler)
   {
     this.viewHandler = viewHandler;
+  }
+
+  public void getPerformance(ActionEvent e) {
+    LocalDate dateFrom = fromDate.getValue();
+    LocalDate dateTo = toDate.getValue();
+
+    List<Double> tempOut = viewHandler.getConnection().getGraphTP(dateFrom, dateTo);
+    this.lineChart.setAnimated(false);
+    XYChart.Series series = new XYChart.Series();
+
+    for (int i = 0; i < tempOut.size(); i++) {
+      String month = getMonthName(i + 1);
+      series.getData().add(new XYChart.Data(month, tempOut.get(i)));
+    }
+
+    this.lineChart.getData().addAll(series);
+    lineChart.getData().clear();
+    lineChart.getData().add(series);
+  }
+
+  private String getMonthName(int month)
+  {
+    return new DateFormatSymbols().getMonths()[month - 1];
   }
 
   public void initialize()
@@ -81,21 +111,18 @@ public class FrontPage
     series2.getData().add(new XYChart.Data("24", 969828));
     series2.getData().add(new XYChart.Data("25", 1032836));
 
-    this.lineChart.getData().addAll(series, series2);
+    this.lineChart2.getData().addAll(series, series2);
   }
 
-  public void solarPanel(ActionEvent e)
-  {
-    viewHandler.changeScene(ViewHandler.SOLAR_PANEL);
-  }
-
-  public void thermalPanel(ActionEvent e)
-  {
+  public void thermalPanel(ActionEvent e) {
     viewHandler.changeScene(ViewHandler.THERMAL_PANEL);
   }
 
-  public void information(ActionEvent e)
-  {
+  public void information(ActionEvent e) {
     viewHandler.changeScene(ViewHandler.INFORMATION);
+  }
+
+  public void solarPanel(ActionEvent e) {
+    viewHandler.changeScene(ViewHandler.SOLAR_PANEL);
   }
 }

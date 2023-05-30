@@ -3,20 +3,25 @@ package view;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.InformationTable;
+import model.SolarTable;
 import model.ThermalTable;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import java.sql.*;
+import java.util.List;
 
 // PLEASE NOTE: For the connection to properly establish, use
 // "postgresql-42.2.5.jar" in external libraries
 
-public class DatabaseConnector {
-    private Connection connection;
-    public String informationTable = "InformationTable";
-    public String thermalTable = "ThermalTable";
-    public String quotes = "\"";
+public class DatabaseConnector
+{
+  private Connection connection;
+  public String informationTable = "InformationTable";
+  public String thermalTable = "ThermalTable";
+  public String solarTable = "SolarTable";
+  public String quotes = "\"";
 
   public void connect(String host, int portNo, String userName, String password)
   {
@@ -90,12 +95,41 @@ public class DatabaseConnector {
         result.add(thTable);
       }
 
-        } catch (SQLException e) {
-            System.out.println("Error trying to generate table of Thermal Panels");
-            e.printStackTrace();
-        }
-        return result;
     }
+    catch (SQLException e)
+    {
+      System.out.println("Error trying to generate table of Thermal Panels");
+      e.printStackTrace();
+    }
+    return result;
+  }
+
+  public ObservableList<SolarTable> retrieveSolarTable()
+  {
+    ObservableList<SolarTable> result = FXCollections.observableArrayList();
+
+    String sql = "SELECT * FROM public." + quotes + solarTable + quotes;
+
+    try
+    {
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery(sql);
+
+      while (resultSet.next())
+      { // Goes to the next row of data if available
+        SolarTable slTable = new SolarTable(resultSet.getFloat(1),
+            resultSet.getFloat(2), resultSet.getFloat(3), resultSet.getDate(4));
+        result.add(slTable);
+      }
+
+    }
+    catch (SQLException e)
+    {
+      System.out.println("Error trying to generate table of Solar Panels");
+      e.printStackTrace();
+    }
+    return result;
+  }
 
   public ObservableList<InformationTable> retrieveInformationTable()
   {

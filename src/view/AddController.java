@@ -113,7 +113,7 @@ public class AddController {
     String manufacturer = manufacturerField.getText();
     int placementRow = Integer.parseInt(placementRowField.getText());
     int placementColumn = Integer.parseInt(placementColumnField.getText());
-    Date installDate = parseDate(installDateField.getText()); // Get the installation date as text
+    Date installDate = parseDate(installDateField.getText());
     String contactInfoEmail = contactInfoEmailField.getText();
     int contactInfoPhone = Integer.parseInt(contactInfoPhoneField.getText());
     String type = typeChoiceBox.getValue();
@@ -121,7 +121,6 @@ public class AddController {
     InformationTable information = new InformationTable(manufacturer, placementRow, placementColumn,
             installDate, contactInfoEmail, contactInfoPhone, type);
 
-    // You should have a method in your database connector class to save the information
     viewHandler.getConnection().storeInformation(information);
 
     viewHandler.changeScene(ViewHandler.INFORMATION);
@@ -132,7 +131,9 @@ public class AddController {
     installDateField.clear();
     contactInfoEmailField.clear();
     contactInfoPhoneField.clear();
+
   }
+
 
   public void back(ActionEvent event)
   {
