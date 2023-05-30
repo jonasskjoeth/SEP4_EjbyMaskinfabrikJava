@@ -19,6 +19,7 @@ public class InformationController
   @FXML private TableColumn<InformationTable, Date> installDate;
   @FXML private TableColumn<InformationTable, String> contactInfoEmail;
   @FXML private TableColumn<InformationTable, Integer> contactInfoPhone;
+  @FXML private TableColumn<InformationTable, String> type;
 
   private ViewHandler viewHandler;
 
@@ -72,6 +73,8 @@ public class InformationController
     installDate.setCellValueFactory(new PropertyValueFactory<>("installDate"));
     contactInfoEmail.setCellValueFactory(new PropertyValueFactory<>("contactInfoEmail"));
     contactInfoPhone.setCellValueFactory(new PropertyValueFactory<>("contactInfoPhone"));
+    type.setCellValueFactory(new PropertyValueFactory<>("type"));
+
 
     informationTableView.setItems(viewHandler.getConnection().retrieveInformationTable());
 

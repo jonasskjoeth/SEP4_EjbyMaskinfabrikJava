@@ -1,6 +1,7 @@
 package view;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
@@ -97,7 +98,7 @@ public class ViewHandler
     }
     catch (IOException e)
     {
-      System.out.println("Loader stadig ikke");
+      System.out.println("Failed to load thermalDAta");
       System.exit(1);
     }
 
@@ -136,6 +137,29 @@ public class ViewHandler
       addController.init(this);
     } catch (IOException e) {
       System.out.println("Failed to load add.fxml");
+      e.printStackTrace();
+      System.exit(1);
+    }
+
+    loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("graphSP.fxml"));
+    try {
+      graphSPScene = new Scene(loader.load());
+      graphSPController = loader.getController();
+      graphSPController.init(this);
+    } catch (IOException e) {
+      System.out.println("Failed to load graph SolarPanel");
+      System.exit(1);
+    }
+
+    loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("historyPage.fxml"));
+    try {
+      historyScene = new Scene(loader.load());
+      historyController = loader.getController();
+      historyController.init(this);
+    } catch (IOException e) {
+      System.out.println("Failed to load historyPage");
       System.exit(1);
     }
 
@@ -146,37 +170,48 @@ public class ViewHandler
       editController = loader.getController();
       editController.init(this);
     } catch (IOException e) {
-      System.out.println("edit scene could not load?");
+      System.out.println("Failed to load edit scene");
+      e.printStackTrace();
       System.exit(1);
     }
 
     changeScene(FRONT_PAGE);
+    Image image = new Image(
+        "C:\\Users\\jonas\\IdeaProjects\\SEP4_EjbyMaskinfabrik\\src\\resources\\EjbyIcon.png");
+    Image image2 = new Image(
+        "C:\\Users\\jonas\\IdeaProjects\\SEP4_EjbyMaskinfabrik\\src\\resources\\EjbyIcon2.png");
+    Image image3 = new Image(
+        "C:\\Users\\jonas\\IdeaProjects\\SEP4_EjbyMaskinfabrik\\src\\resources\\EjbyIcon3.png");
+    primaryStage.getIcons().add(image);
+    primaryStage.setResizable(false);
+    primaryStage.setX(200);
+    primaryStage.setY(100);
   }
 
   public void changeScene(String sceneName)
   {
     if (FRONT_PAGE.equals(sceneName))
     {
-      primaryStage.setTitle("Front Page");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(frontPage);
       primaryStage.show();
     }
     else if (SOLAR_PANEL.equals(sceneName))
     {
-      primaryStage.setTitle("Solar Panel");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(solarPanelScene);
       primaryStage.show();
-     // solarPanelController.updateView();
+//      solarPanelController.updateView();
     }
     else if (THERMAL_PANEL.equals(sceneName))
     {
-      primaryStage.setTitle("Thermal Panel");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(thermalPanelScene);
       primaryStage.show();
     }
     else if (INFORMATION.equals(sceneName))
     {
-      primaryStage.setTitle("Information");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(informationScene);
       primaryStage.show();
       informationController.updateView();
@@ -190,24 +225,24 @@ public class ViewHandler
 //    }
     else if (THERMAL_DATA.equals(sceneName))
     {
-      primaryStage.setTitle("Thermal Data");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(thermalDataScene);
       primaryStage.show();
       thermalDataController.updateView();
     }
     else if (ADD.equals(sceneName)) {
-      primaryStage.setTitle("Add");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(addScene);
       primaryStage.show();
     } else if (EDIT.equals(sceneName))
     {
-      primaryStage.setTitle("Edit");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(editScene);
       primaryStage.show();
     }
     else if (BACK.equals(sceneName))
     {
-      primaryStage.setTitle("Information");
+      primaryStage.setTitle("EJBY MASKINFABRIK");
       primaryStage.setScene(informationScene);
       primaryStage.show();
     }
@@ -221,7 +256,7 @@ public class ViewHandler
     return addController;
   }
   public void updateInformationView() {
-    informationController.updateView(); // Call the updateView method on informationController
+    informationController.updateView();
   }
 
   public EditController getEditController()

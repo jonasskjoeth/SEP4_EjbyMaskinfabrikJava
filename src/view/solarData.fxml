@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -8,7 +11,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SolarData">
    <children>
@@ -17,23 +19,18 @@
             <Image url="@Background_Blue_Sky.jpg" />
          </image>
       </ImageView>
-      <Button layoutX="482.0" layoutY="540.0" mnemonicParsing="false" onAction="#solarPanel" prefHeight="40.0" prefWidth="150.0" text="Savings/CO2">
+      <Button layoutX="482.0" layoutY="540.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="150.0" text="Back">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Text fill="#18c9ff" layoutX="61.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ejby Maskinfabrik">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Text>
       <Line endX="295.1219177246094" endY="598.5" startX="300.3000183105469" startY="-2.441406286379788E-5" AnchorPane.leftAnchor="400.0" />
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="125.0" layoutY="451.0" mnemonicParsing="false" onAction="#thermalPanel" prefHeight="40.0" prefWidth="150.0" text="Thermal Collector" AnchorPane.bottomAnchor="110.09997556209566">
+      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="125.0" layoutY="451.0" mnemonicParsing="false" onAction="#thermalPanel" prefHeight="40.0" prefWidth="150.0" text="Thermal Panel" AnchorPane.bottomAnchor="110.09997556209566">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="125.0" layoutY="506.0" mnemonicParsing="false" onAction="#solarPanel" prefHeight="40.0" prefWidth="150.0" text="Solar Panel" AnchorPane.bottomAnchor="60.0">
+      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="125.0" layoutY="506.0" mnemonicParsing="false" onAction="#solarPanel" prefHeight="40.0" prefWidth="150.0" style="-fx-border-color: #777777; -fx-background-color: #A7A7A7;" text="Solar Panel" AnchorPane.bottomAnchor="60.0">
          <font>
             <Font size="16.0" />
          </font>
@@ -43,15 +40,26 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <TableView layoutX="413.0" layoutY="14.0" prefHeight="502.0" prefWidth="678.0">
+      <TableView fx:id="solarDataTableView" layoutX="413.0" layoutY="14.0" prefHeight="502.0" prefWidth="678.0">
          <columns>
-            <TableColumn prefWidth="42.39996337890625" text="ID" />
-            <TableColumn prefWidth="195.199951171875" text="Date" />
-            <TableColumn prefWidth="171.20001220703125" text="Time" />
-            <TableColumn prefWidth="92.00006103515625" text="Temp Out" />
-            <TableColumn prefWidth="96.800048828125" text="Temp Control" />
-            <TableColumn minWidth="0.0" prefWidth="80.80010986328125" text="Temp In" />
+            <TableColumn fx:id="volt" prefWidth="178.39996337890625" text="Volt" />
+            <TableColumn fx:id="ampere" prefWidth="171.20001220703125" text="Ampere" />
+            <TableColumn fx:id="watt" prefWidth="187.2000732421875" text="KWH" />
+            <TableColumn fx:id="date" prefWidth="124.00006103515625" text="Date" />
          </columns>
       </TableView>
+      <ImageView fitHeight="195.0" fitWidth="372.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/ejby-maskinfabrik-high-resolution-logo-black-on-transparent-background.png" />
+         </image>
+      </ImageView>
+      <LineChart fx:id="lineChart" animated="false" createSymbols="false" layoutX="14.0" layoutY="85.0" legendVisible="false" prefHeight="300.0" prefWidth="372.0">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" fx:id="x" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="y" side="LEFT" />
+         </yAxis>
+      </LineChart>
    </children>
 </AnchorPane>

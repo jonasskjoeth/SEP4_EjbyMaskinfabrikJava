@@ -18,56 +18,77 @@ public class DatabaseConnector {
     public String thermalTable = "ThermalTable";
     public String quotes = "\"";
 
-    public void connect(String host, int portNo, String userName, String password) {
-        // Establishing a PostgreSQL database connection
-        String databaseUrl = "jdbc:postgresql://" + host + ":" + portNo + "/" + userName;
+  public void connect(String host, int portNo, String userName, String password)
+  {
+    // Establishing a PostgreSQL database connection
+    String databaseUrl =
+        "jdbc:postgresql://" + host + ":" + portNo + "/" + userName;
 
-        try {
-            connection = DriverManager.getConnection(databaseUrl, userName, password);
-            System.out.println("Connection established to: " + databaseUrl);
-        } catch (Exception exception) {
-            System.out.println("Connection failed");
-            exception.printStackTrace();
-        }
+    try
+    {
+      connection = DriverManager.getConnection(databaseUrl, userName, password);
+      System.out.println("Connection established to: " + databaseUrl);
     }
-
-    private Timestamp convertToSqlTimestamp(java.util.Date uDate) {
-        Timestamp timestamp = new Timestamp(uDate.getTime());
-        return timestamp;
+    catch (Exception exception)
+    {
+      System.out.println("Connection failed");
+      exception.printStackTrace();
     }
+  }
 
+  private Timestamp convertToSqlTimestamp(java.util.Date uDate)
+  {
+    Timestamp timestamp = new Timestamp(uDate.getTime());
+    return timestamp;
+  }
 
-    public void storeInformation(InformationTable information) {
-        String sql = "INSERT INTO public." + quotes + informationTable + quotes + " (" + "\"" + "manufacturer" + "\"" + ",\"" +
-                "placementrow" + "\"," + "\"" + "placementcolumn" + "\"," + "\"" +
-                "installdate" + "\"," + "\"" + "contactinfoemail" + "\"," + "\"" + "contactinfophone" + "\"" + ") VALUES (" + "'" + information.getManufacturer() + "'" + "," + "'" + information.getPlacementRow() + "'" + "," +
-                "'" + information.getPlacementColumn() + "'" + "," + "'" + convertToSqlTimestamp(information.getInstallDate()) + "'" + "," + "'" + information.getContactInfoEmail()
-                + "'" + "," + "'" + information.getContactInfoPhone() + "')";
+  public void storeInformation(InformationTable information)
+  {
+    String sql =
+        "INSERT INTO public." + quotes + informationTable + quotes + " (" + "\""
+            + "manufacturer" + "\"" + ",\"" + "placementrow" + "\"," + "\""
+            + "placementcolumn" + "\"," + "\"" + "installdate" + "\"," + "\""
+            + "contactinfoemail" + "\"," + "\"" + "contactinfophone" + "\""
+            + ",\"type\"" + ") VALUES (" + "'" + information.getManufacturer()
+            + "'" + "," + "'" + information.getPlacementRow() + "'" + "," + "'"
+            + information.getPlacementColumn() + "'" + "," + "'"
+            + convertToSqlTimestamp(information.getInstallDate()) + "'" + ","
+            + "'" + information.getContactInfoEmail() + "'" + "," + "'"
+            + information.getContactInfoPhone() + "','" + information.getType()
+            + "')";
 
-        try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            System.out.println("Succesfully executed SQL statement");
-        } catch (SQLException e) {
-            System.out.println("Error trying to insert new information in InformationTable");
-            e.printStackTrace();
-        }
+    try
+    {
+      Statement statement = connection.createStatement();
+      statement.executeUpdate(sql);
+      System.out.println("Succesfully executed SQL statement");
     }
+    catch (SQLException e)
+    {
+      System.out.println(
+          "Error trying to insert new information in InformationTable");
+      e.printStackTrace();
+    }
+  }
 
-    public ObservableList<ThermalTable> retrieveThermalTable() {
-        ObservableList<ThermalTable> result = FXCollections.observableArrayList();
+  public ObservableList<ThermalTable> retrieveThermalTable()
+  {
+    ObservableList<ThermalTable> result = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM public." + quotes + thermalTable + quotes;
+    String sql = "SELECT * FROM public." + quotes + thermalTable + quotes;
 
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql); // use the executeQuery() function when a result is expected
+    try
+    {
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery(sql); // use the executeQuery() function when a result is expected
 
-            while (resultSet.next()) { // Goes to the next row of data if available
-                ThermalTable thTable = new ThermalTable(resultSet.getDate(1), resultSet.getFloat(2),
-                        resultSet.getFloat(3), resultSet.getFloat(4), resultSet.getFloat(5));
-                result.add(thTable);
-            }
+      while (resultSet.next())
+      { // Goes to the next row of data if available
+        ThermalTable thTable = new ThermalTable(resultSet.getTimestamp(1),
+            resultSet.getFloat(2), resultSet.getFloat(3), resultSet.getFloat(4),
+            resultSet.getFloat(5));
+        result.add(thTable);
+      }
 
         } catch (SQLException e) {
             System.out.println("Error trying to generate table of Thermal Panels");
@@ -76,58 +97,201 @@ public class DatabaseConnector {
         return result;
     }
 
-    public ObservableList<InformationTable> retrieveInformationTable() {
-        ObservableList<InformationTable> result = FXCollections.observableArrayList();
+  public ObservableList<InformationTable> retrieveInformationTable()
+  {
+    ObservableList<InformationTable> result = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM public." + quotes + informationTable + quotes;
+    String sql = "SELECT * FROM public." + quotes + informationTable + quotes;
 
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql); // use the executeQuery() function when a result is expected
-
-            while (resultSet.next()) { // Goes to the next row of data if available
-                InformationTable inTable = new InformationTable(resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3),
-                        resultSet.getDate(4), resultSet.getString(5), resultSet.getInt(6));
-                result.add(inTable);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error trying to generate table of Information Panels");
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public void updateInformation(InformationTable information)
+    try
     {
-        String sql = "UPDATE public.\"InformationTable\" SET (manufacturer, placementrow, placementcolumn, "
-            + "contactinfoemail, contactinfophone) = ('" + information.getManufacturer()
-            + "'," + information.getPlacementRow() + "," + information.getPlacementColumn()
-            + ",'" + information.getContactInfoEmail() + "'," + information.getContactInfoPhone() + ")"
-            + " WHERE manufacturer = '" + information.getManufacturer() + "'";
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery(
+          sql); // use the executeQuery() function when a result is expected
 
+      while (resultSet.next())
+      { // Goes to the next row of data if available
+        InformationTable inTable = new InformationTable(resultSet.getInt(1),
+            resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4),
+            resultSet.getDate(5), resultSet.getString(7), resultSet.getInt(6),
+            resultSet.getString(8));
+        result.add(inTable);
+      }
 
-        // UPDATE public."InformationTable" SET (manfuacturer, placementR
-        try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            System.out.println("Succesfully executed SQL statement");
-        } catch (SQLException e) {
-            System.out.println("Error trying to update information in InformationTable");
-            e.printStackTrace();
+    }
+    catch (SQLException e)
+    {
+      System.out.println(
+          "Error trying to generate table of Information Panels");
+      e.printStackTrace();
+    }
+    return result;
+  }
+
+  public void updateInformation(InformationTable information)
+  {
+    String sql =
+        "UPDATE public.\"InformationTable\" SET (manufacturer, placementrow, placementcolumn, "
+            + "contactinfoemail, contactinfophone, type) = ('"
+            + information.getManufacturer() + "',"
+            + information.getPlacementRow() + ","
+            + information.getPlacementColumn() + ",'"
+            + information.getContactInfoEmail() + "',"
+            + information.getContactInfoPhone() + ",'"
+            + information.getType() + "')"
+            + " WHERE id = " + information.getId() + ";";
+
+    try
+    {
+      Statement statement = connection.createStatement();
+      statement.executeUpdate(sql);
+      System.out.println(
+          "Succesfully executed SQL statement - update information");
+    }
+    catch (SQLException e)
+    {
+      System.out.println(
+          "Error trying to update information in InformationTable");
+      e.printStackTrace();
+    }
+  }
+
+  //    public void deleteInformation(InformationTable information)
+  //    {
+  //        String sql = "DELETE FROM public.\"InformationTable\" WHERE (manufacturer, placementrow, placementcolumn, "
+  //            + "contactinfoemail, contactinfophone) = ('" + information.getManufacturer()
+  //            + "'," + information.getPlacementRow() + "," + information.getPlacementColumn()
+  //            + ",'" + information.getContactInfoEmail() + "'," + information.getContactInfoPhone() + ")";
+  //
+  //        try {
+  //            Statement statement = connection.createStatement();
+  //            statement.executeUpdate(sql);
+  //            System.out.println("Succesfully executed SQL statement - delete information");
+  //        } catch (SQLException e) {
+  //            System.out.println("Error trying to delete information in InformationTable");
+  //            e.printStackTrace();
+  //        }
+  //    }
+
+  public void deleteInformation(int id)
+  {
+    String deleteSQL =
+        "DELETE FROM public." + quotes + informationTable + quotes
+            + " WHERE \"manufacturer\" = 'manufacturer'";
+
+    try (Statement mhh = connection.createStatement();
+        PreparedStatement statement = connection.prepareStatement(deleteSQL))
+    {
+      statement.setInt(1, id);
+      int rowsAffected = statement.executeUpdate();
+
+      if (rowsAffected > 0)
+      {
+        System.out.println("Data deleted successfully");
+      }
+      else
+      {
+        System.out.println("No data found matching the given criteria");
+      }
+    }
+    catch (SQLException ex)
+    {
+      System.out.println("Error trying to delete data");
+      ex.printStackTrace();
+    }
+  }
+
+  public List<Double> getGraphTP(LocalDate FromDate, LocalDate ToDate)
+  {
+    List<Double> graphList = new ArrayList<>();
+
+    String sql = "select tempOut from public.\"ThermalTable\"" + "where"
+        + "\"ThermalTable\"" + ".datestamp between '" + FromDate + "' and '"
+        + ToDate + "';";
+
+    // select tempOut from "ThermalTable" where "ThermalTable".datestamp between '2022-01-01' and '2023-05-01';
+
+    try
+    {
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery(sql);
+      while (resultSet.next())
+      {
+        graphList.add(resultSet.getDouble("tempOut"));
+      }
+    }
+    catch (SQLException e)
+    {
+      return graphList;
+    }
+    return graphList;
+  }
+
+  public ObservableList<InformationTable> getInfoLog()
+  {
+    ObservableList<InformationTable> result = FXCollections.observableArrayList();
+
+    String sql =
+        "select manufacturer, placementrow, placementcolumn, installdate, contactinfophone, type, contactinfoemail from "
+            + "public.\"InformationTable_log\";";
+
+    try
+    {
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery(sql);
+
+      while (resultSet.next())
+      {
+        InformationTable informationTable1 = new InformationTable(
+            resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3),
+            resultSet.getDate(4), resultSet.getString(7),
+            resultSet.getInt(5), resultSet.getString(6));
+        result.add(informationTable1);
+      }
+    }
+    catch (SQLException e)
+    {
+      System.out.println("Selection of information failed");
+      e.printStackTrace();
+    }
+    return result;
+  }
+
+  public List<Double> getGraphSP(LocalDate fromDate, LocalDate toDate) {
+    List<Double> graphList = new ArrayList<>();
+
+    String sql = "select watt from public.SolarTable where SolarTable.date between '" + fromDate + "' and '"
+        + toDate + "';";
+
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setDate(1, Date.valueOf(fromDate));
+      statement.setDate(2, Date.valueOf(toDate));
+
+      try (ResultSet resultSet = statement.executeQuery()) {
+        while (resultSet.next()) {
+          graphList.add(resultSet.getDouble("watt"));
         }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
 
+    return graphList;
+  }
 
-    public void close() {
-        try {
-            connection.close();
-            System.out.println("Connection closed");
-        } catch (SQLException exception) {
-            System.out.println("Connection closing failed");
-            exception.printStackTrace();
-        }
+  public void close()
+  {
+    try
+    {
+      connection.close();
+      System.out.println("Connection closed");
     }
+    catch (SQLException exception)
+    {
+      System.out.println("Connection closing failed");
+      exception.printStackTrace();
+    }
+  }
 }
 
 //    public void saveInformation(InformationTable information) {

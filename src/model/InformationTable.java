@@ -1,11 +1,11 @@
 package model;
 
-import javafx.event.ActionEvent;
-
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class InformationTable
 {
+  private String type;
   private int id;
   private String manufacturer;
   private int placementRow;
@@ -13,14 +13,19 @@ public class InformationTable
   private Date installDate;
   private String contactInfoEmail;
   private int contactInfoPhone;
+  private Timestamp logDate;
 
-  public InformationTable(String manufacturer, int placementRow, int placementColumn,
-                          Date installDate, String contactInfoEmail, int contactInfoPhone)
+  public InformationTable(String manufacturer, int placementRow,
+      int placementColumn, Date installDate, String contactInfoEmail,
+      int contactInfoPhone, String type)
   {
-    this(-1, manufacturer, placementRow, placementColumn, installDate, contactInfoEmail, contactInfoPhone);
+    this(-1, manufacturer, placementRow, placementColumn, installDate,
+        contactInfoEmail, contactInfoPhone, type);
   }
 
-  public InformationTable(int id, String manufacturer, int placementRow, int placementColumn, Date installDate, String contactInfoEmail, int contactInfoPhone)
+  public InformationTable(int id, String manufacturer, int placementRow,
+      int placementColumn, Date installDate, String contactInfoEmail,
+      int contactInfoPhone, String type, Timestamp logDate)
   {
     this.manufacturer = manufacturer;
     this.placementRow = placementRow;
@@ -28,6 +33,31 @@ public class InformationTable
     this.installDate = installDate;
     this.contactInfoEmail = contactInfoEmail;
     this.contactInfoPhone = contactInfoPhone;
+    this.type = type;
+    this.logDate = logDate;
+  }
+
+  public InformationTable(int id, String manufacturer, int placementRow,
+      int placementColumn, Date installDate, String contactInfoEmail,
+      int contactInfoPhone, String type)
+  {
+    this.manufacturer = manufacturer;
+    this.placementRow = placementRow;
+    this.placementColumn = placementColumn;
+    this.installDate = installDate;
+    this.contactInfoEmail = contactInfoEmail;
+    this.contactInfoPhone = contactInfoPhone;
+    this.type = type;
+    this.id = id;
+  }
+  public Timestamp getLogDate()
+  {
+    return logDate;
+  }
+
+  public void setLogDate(Timestamp logDate)
+  {
+    this.logDate = logDate;
   }
 
   public String getManufacturer()
@@ -90,6 +120,16 @@ public class InformationTable
     this.contactInfoPhone = contactInfoPhone;
   }
 
+  public String getType()
+  {
+    return type;
+  }
+
+  public void setType(String type)
+  {
+    this.type = type;
+  }
+
   public int getId()
   {
     return id;
@@ -100,17 +140,23 @@ public class InformationTable
     this.id = id;
   }
 
-  public String toString() {
-    if (id > -1) {
-      return "model.InformationTable [id=" + id + ", manufacturer=" + manufacturer +
-              ", placementRow=" + placementRow + ", placementColumn=" + placementColumn +
-              ", Installationdate=" + installDate + ", contactInfoEmail=" + contactInfoEmail +
-              ", contactInfoPhone=" + contactInfoPhone +"]";
-    } else {
-      return "model.InformationTable [id=unspecified, manufacturer=" + manufacturer +
-              ", placementRow=" + placementRow + ", placementColumn=" + placementColumn +
-              ", Installationdate=" + installDate + ", contactInfoEmail=" + contactInfoEmail +
-              ", contactInfoPhone=" + contactInfoPhone +"]";
+  public String toString()
+  {
+    if (id > -1)
+    {
+      return "model.InformationTable [id=" + id + ", manufacturer="
+          + manufacturer + ", placementRow=" + placementRow
+          + ", placementColumn=" + placementColumn + ", Installationdate="
+          + installDate + ", contactInfoEmail=" + contactInfoEmail
+          + ", contactInfoPhone=" + contactInfoPhone + ", type=" + type + "]";
+    }
+    else
+    {
+      return "model.InformationTable [id=unspecified, manufacturer="
+          + manufacturer + ", placementRow=" + placementRow
+          + ", placementColumn=" + placementColumn + ", Installationdate="
+          + installDate + ", contactInfoEmail=" + contactInfoEmail
+          + ", contactInfoPhone=" + contactInfoPhone + ", type=" + type + "]";
     }
   }
 }

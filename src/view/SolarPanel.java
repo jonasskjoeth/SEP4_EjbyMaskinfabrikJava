@@ -30,4 +30,8 @@ public class SolarPanel
     viewHandler.changeScene(ViewHandler.THERMAL_PANEL);
   }
 
+  public void graph (ActionEvent e)
+  {
+    viewHandler.changeScene(ViewHandler.GRAPHSP);
+  }
 }

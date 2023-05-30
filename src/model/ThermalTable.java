@@ -1,22 +1,24 @@
 package model;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class ThermalTable
 {
     private int id;
-    private Date datestamp;
+    private Timestamp datestamp;
     private float time;
     private float tempOut;
     private float tempCONTROL;
     private float tempIn;
 
-    public ThermalTable(Date datestamp, float time, float tempOut, float tempCONTROL, float tempIn)
+    public ThermalTable(Timestamp datestamp, float time, float tempOut, float tempCONTROL, float tempIn)
     {
       this(-1, datestamp, time, tempOut, tempCONTROL, tempIn);
     }
 
-    public ThermalTable(int id, Date datestamp, float time, float tempOut, float tempCONTROL, float tempIn)
+    public ThermalTable(int id, Timestamp datestamp, float time, float tempOut, float tempCONTROL, float tempIn)
   {
     this.id = id;
     this.datestamp = datestamp;
@@ -30,7 +32,7 @@ public class ThermalTable
     return datestamp;
   }
 
-  public void setDatestamp(Date datestamp) {
+  public void setDatestamp(Timestamp datestamp) {
     this.datestamp = datestamp;
   }
 
